@@ -8,7 +8,7 @@ const port = 3001;
 app.use(cors());
 
 app.get("/api/weather", async (req, res) => {
-  const { location } = req.query;
+  const location = req.query;
   const OPENWEATHER_API_KEY = process.env.API_KEY;
   const OPENWEATHER_API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${OPENWEATHER_API_KEY}`;
   try {

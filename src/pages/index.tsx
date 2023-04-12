@@ -7,13 +7,9 @@ import axios from "axios";
 const Home = () => {
   const [search, setSearch] = useState<string>("");
   const [weatherResult, setWeatherResult] = useState<Weather>();
-  const [icon, SetIcon] = useState<string[]>([]);
-  const weatherService = WeatherService.getInstance();
+  // const weatherService = WeatherService.getInstance();
 
   const getWeather = async () => {
-    const key = process.env.API_KEY;
-    const url = "https://api.openweathermap.org/data/2.5/";
-
     try {
       let location = search;
       const response = await axios.get(
