@@ -12,9 +12,7 @@ const Home = () => {
   const getWeather = async () => {
     try {
       let location = search;
-      const response = await axios.get(
-        `http://localhost:3001/api/weather?location=${location}`
-      );
+      const response = await axios.get(`api/weather?location=${location}`);
       console.log(response?.data);
       setWeatherResult(response?.data);
       const newWeather: Weather = {
@@ -37,7 +35,7 @@ const Home = () => {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className=" w-60 h-fit p-4 bg-slate-400 rounded-3xl items-center flex flex-col text-center justify-center">
+      <div className=" w-60 h-fit p-4 bg-slate-400 rounded-3xl items-center flex flex-col text-center justify-center mt-28">
         <div className="my-1">Enter any location for current weather</div>
         <input
           type="text"
