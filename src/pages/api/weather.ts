@@ -1,5 +1,7 @@
-const axios = require("axios");
+import axios, { AxiosError } from "axios"
 import { NextApiRequest, NextApiResponse } from "next";
+import { Weather,OpenWeatherError } from "../interfaces/weather";
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,9 +18,21 @@ export default async function handler(
       description: response.data.weather[0].main,
       detailedDescription: response.data.weather[0].description,
       icon: response.data.weather[0].icon,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error fetching weather data hoe" });
-  }
+    } as Weather);
+  } catch (e) {
+    console.log(e)
+    if (axios.isAxiosError(e)) {
+        const error = e as AxiosError
+        if (error.response) {
+            const owError = error.response.data as OpenWeatherError
+            res.status(error.response.status).json({
+                code: owError.cod,
+                message: owError.message,
+            })
+            return
+        }
+    }
+    res.status(500).json({ message: "Error fetching weather data" })
 }
+}
+
