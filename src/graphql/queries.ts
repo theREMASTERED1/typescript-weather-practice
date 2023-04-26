@@ -6,12 +6,16 @@ export const getWeather = /* GraphQL */ `
   query GetWeather($id: ID!) {
     getWeather(id: $id) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -25,15 +29,52 @@ export const listWeathers = /* GraphQL */ `
     listWeathers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        username
         description
         location
         isComplete
+        isDeleted
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncWeathers = /* GraphQL */ `
+  query SyncWeathers(
+    $filter: ModelWeatherFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncWeathers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        username
+        description
+        location
+        isComplete
+        isDeleted
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;

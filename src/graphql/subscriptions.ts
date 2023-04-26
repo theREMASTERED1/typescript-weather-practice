@@ -9,12 +9,16 @@ export const onCreateWeather = /* GraphQL */ `
   ) {
     onCreateWeather(filter: $filter, owner: $owner) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -26,12 +30,16 @@ export const onUpdateWeather = /* GraphQL */ `
   ) {
     onUpdateWeather(filter: $filter, owner: $owner) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -43,12 +51,16 @@ export const onDeleteWeather = /* GraphQL */ `
   ) {
     onDeleteWeather(filter: $filter, owner: $owner) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }

@@ -1,7 +1,9 @@
-type Weather @model @auth(rules: [{ allow: owner }, { allow: private, operations: [read] }, {allow: public, operations: [read]}]) {
+type Weather @model @auth(rules: [{allow: owner}, {allow: private, operations: [read]}, {allow: public, operations: [read]}]) {
   id: ID!
-  name: String!
+  username: String!
   description: String
-  location: String
-  isComplete: String
-} 
+  location: String!
+  isComplete: Boolean!
+  isDeleted: Boolean
+}
+ 

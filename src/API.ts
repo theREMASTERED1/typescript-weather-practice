@@ -4,17 +4,20 @@
 
 export type CreateWeatherInput = {
   id?: string | null,
-  name: string,
+  username: string,
   description?: string | null,
-  location?: string | null,
-  isComplete?: string | null,
+  location: string,
+  isComplete: boolean,
+  isDeleted?: boolean | null,
+  _version?: number | null,
 };
 
 export type ModelWeatherConditionInput = {
-  name?: ModelStringInput | null,
+  username?: ModelStringInput | null,
   description?: ModelStringInput | null,
   location?: ModelStringInput | null,
-  isComplete?: ModelStringInput | null,
+  isComplete?: ModelBooleanInput | null,
+  isDeleted?: ModelBooleanInput | null,
   and?: Array< ModelWeatherConditionInput | null > | null,
   or?: Array< ModelWeatherConditionInput | null > | null,
   not?: ModelWeatherConditionInput | null,
@@ -60,36 +63,51 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type Weather = {
   __typename: "Weather",
   id: string,
-  name: string,
+  username: string,
   description?: string | null,
-  location?: string | null,
-  isComplete?: string | null,
+  location: string,
+  isComplete: boolean,
+  isDeleted?: boolean | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   owner?: string | null,
 };
 
 export type UpdateWeatherInput = {
   id: string,
-  name?: string | null,
+  username?: string | null,
   description?: string | null,
   location?: string | null,
-  isComplete?: string | null,
+  isComplete?: boolean | null,
+  isDeleted?: boolean | null,
+  _version?: number | null,
 };
 
 export type DeleteWeatherInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type ModelWeatherFilterInput = {
   id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
+  username?: ModelStringInput | null,
   description?: ModelStringInput | null,
   location?: ModelStringInput | null,
-  isComplete?: ModelStringInput | null,
+  isComplete?: ModelBooleanInput | null,
+  isDeleted?: ModelBooleanInput | null,
   and?: Array< ModelWeatherFilterInput | null > | null,
   or?: Array< ModelWeatherFilterInput | null > | null,
   not?: ModelWeatherFilterInput | null,
@@ -115,14 +133,16 @@ export type ModelWeatherConnection = {
   __typename: "ModelWeatherConnection",
   items:  Array<Weather | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelSubscriptionWeatherFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
+  username?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
   location?: ModelSubscriptionStringInput | null,
-  isComplete?: ModelSubscriptionStringInput | null,
+  isComplete?: ModelSubscriptionBooleanInput | null,
+  isDeleted?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionWeatherFilterInput | null > | null,
   or?: Array< ModelSubscriptionWeatherFilterInput | null > | null,
 };
@@ -157,6 +177,11 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
 export type CreateWeatherMutationVariables = {
   input: CreateWeatherInput,
   condition?: ModelWeatherConditionInput | null,
@@ -166,12 +191,16 @@ export type CreateWeatherMutation = {
   createWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -185,12 +214,16 @@ export type UpdateWeatherMutation = {
   updateWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -204,12 +237,16 @@ export type DeleteWeatherMutation = {
   deleteWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -222,12 +259,16 @@ export type GetWeatherQuery = {
   getWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -244,15 +285,50 @@ export type ListWeathersQuery = {
     items:  Array< {
       __typename: "Weather",
       id: string,
-      name: string,
+      username: string,
       description?: string | null,
-      location?: string | null,
-      isComplete?: string | null,
+      location: string,
+      isComplete: boolean,
+      isDeleted?: boolean | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       owner?: string | null,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncWeathersQueryVariables = {
+  filter?: ModelWeatherFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncWeathersQuery = {
+  syncWeathers?:  {
+    __typename: "ModelWeatherConnection",
+    items:  Array< {
+      __typename: "Weather",
+      id: string,
+      username: string,
+      description?: string | null,
+      location: string,
+      isComplete: boolean,
+      isDeleted?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -265,12 +341,16 @@ export type OnCreateWeatherSubscription = {
   onCreateWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -284,12 +364,16 @@ export type OnUpdateWeatherSubscription = {
   onUpdateWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };
@@ -303,12 +387,16 @@ export type OnDeleteWeatherSubscription = {
   onDeleteWeather?:  {
     __typename: "Weather",
     id: string,
-    name: string,
+    username: string,
     description?: string | null,
-    location?: string | null,
-    isComplete?: string | null,
+    location: string,
+    isComplete: boolean,
+    isDeleted?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     owner?: string | null,
   } | null,
 };

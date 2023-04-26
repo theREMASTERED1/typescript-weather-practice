@@ -9,12 +9,16 @@ export const createWeather = /* GraphQL */ `
   ) {
     createWeather(input: $input, condition: $condition) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -26,12 +30,16 @@ export const updateWeather = /* GraphQL */ `
   ) {
     updateWeather(input: $input, condition: $condition) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }
@@ -43,12 +51,16 @@ export const deleteWeather = /* GraphQL */ `
   ) {
     deleteWeather(input: $input, condition: $condition) {
       id
-      name
+      username
       description
       location
       isComplete
+      isDeleted
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
   }

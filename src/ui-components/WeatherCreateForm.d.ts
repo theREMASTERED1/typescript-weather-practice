@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -13,24 +13,27 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type WeatherCreateFormInputValues = {
-    name?: string;
+    username?: string;
     description?: string;
     location?: string;
-    isComplete?: string;
+    isComplete?: boolean;
+    isDeleted?: boolean;
 };
 export declare type WeatherCreateFormValidationValues = {
-    name?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
     location?: ValidationFunction<string>;
-    isComplete?: ValidationFunction<string>;
+    isComplete?: ValidationFunction<boolean>;
+    isDeleted?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type WeatherCreateFormOverridesProps = {
     WeatherCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    name?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
     location?: PrimitiveOverrideProps<TextFieldProps>;
-    isComplete?: PrimitiveOverrideProps<TextFieldProps>;
+    isComplete?: PrimitiveOverrideProps<SwitchFieldProps>;
+    isDeleted?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type WeatherCreateFormProps = React.PropsWithChildren<{
     overrides?: WeatherCreateFormOverridesProps | undefined | null;

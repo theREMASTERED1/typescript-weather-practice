@@ -4,6 +4,7 @@ export interface Weather {
   description: string;
   detailedDescription: string | null;
   icon: string;
+  username:string;
 }
 export interface OpenWeatherError {
   cod: number
@@ -17,4 +18,6 @@ export interface MyWeatherError {
 export interface databaseWeather{
   id:number
  location: string
+ version:number
+ _deleted:boolean
 }

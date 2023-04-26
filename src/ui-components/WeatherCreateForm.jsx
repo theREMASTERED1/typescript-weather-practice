@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Weather } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -23,30 +29,34 @@ export default function WeatherCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: "",
+    username: "",
     description: "",
     location: "",
-    isComplete: "",
+    isComplete: false,
+    isDeleted: false,
   };
-  const [name, setName] = React.useState(initialValues.name);
+  const [username, setUsername] = React.useState(initialValues.username);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
   const [location, setLocation] = React.useState(initialValues.location);
   const [isComplete, setIsComplete] = React.useState(initialValues.isComplete);
+  const [isDeleted, setIsDeleted] = React.useState(initialValues.isDeleted);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(initialValues.name);
+    setUsername(initialValues.username);
     setDescription(initialValues.description);
     setLocation(initialValues.location);
     setIsComplete(initialValues.isComplete);
+    setIsDeleted(initialValues.isDeleted);
     setErrors({});
   };
   const validations = {
-    name: [{ type: "Required" }],
+    username: [{ type: "Required" }],
     description: [],
-    location: [],
-    isComplete: [],
+    location: [{ type: "Required" }],
+    isComplete: [{ type: "Required" }],
+    isDeleted: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -74,10 +84,11 @@ export default function WeatherCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name,
+          username,
           description,
           location,
           isComplete,
+          isDeleted,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -124,31 +135,32 @@ export default function WeatherCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
+        label="Username"
         isRequired={true}
         isReadOnly={false}
-        value={name}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name: value,
+              username: value,
               description,
               location,
               isComplete,
+              isDeleted,
             };
             const result = onChange(modelFields);
-            value = result?.name ?? value;
+            value = result?.username ?? value;
           }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
           }
-          setName(value);
+          setUsername(value);
         }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
       ></TextField>
       <TextField
         label="Description"
@@ -159,10 +171,11 @@ export default function WeatherCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
+              username,
               description: value,
               location,
               isComplete,
+              isDeleted,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -179,17 +192,18 @@ export default function WeatherCreateForm(props) {
       ></TextField>
       <TextField
         label="Location"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         value={location}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
+              username,
               description,
               location: value,
               isComplete,
+              isDeleted,
             };
             const result = onChange(modelFields);
             value = result?.location ?? value;
@@ -204,19 +218,20 @@ export default function WeatherCreateForm(props) {
         hasError={errors.location?.hasError}
         {...getOverrideProps(overrides, "location")}
       ></TextField>
-      <TextField
+      <SwitchField
         label="Is complete"
-        isRequired={false}
-        isReadOnly={false}
-        value={isComplete}
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isComplete}
         onChange={(e) => {
-          let { value } = e.target;
+          let value = e.target.checked;
           if (onChange) {
             const modelFields = {
-              name,
+              username,
               description,
               location,
               isComplete: value,
+              isDeleted,
             };
             const result = onChange(modelFields);
             value = result?.isComplete ?? value;
@@ -230,7 +245,35 @@ export default function WeatherCreateForm(props) {
         errorMessage={errors.isComplete?.errorMessage}
         hasError={errors.isComplete?.hasError}
         {...getOverrideProps(overrides, "isComplete")}
-      ></TextField>
+      ></SwitchField>
+      <SwitchField
+        label="Is deleted"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isDeleted}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              username,
+              description,
+              location,
+              isComplete,
+              isDeleted: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.isDeleted ?? value;
+          }
+          if (errors.isDeleted?.hasError) {
+            runValidationTasks("isDeleted", value);
+          }
+          setIsDeleted(value);
+        }}
+        onBlur={() => runValidationTasks("isDeleted", isDeleted)}
+        errorMessage={errors.isDeleted?.errorMessage}
+        hasError={errors.isDeleted?.hasError}
+        {...getOverrideProps(overrides, "isDeleted")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
